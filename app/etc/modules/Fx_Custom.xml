@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Fx_Custom>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Fx_Custom>
+    </modules>
+</config>

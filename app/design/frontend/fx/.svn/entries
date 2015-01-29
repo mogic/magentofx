@@ -1,0 +1,35 @@
+10
+
+dir
+0
+http://svn.magentocommerce.com/source/branches/1.9/app/design/frontend/furniturexpress
+http://svn.magentocommerce.com/source
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+ee4975a1-dc2a-0410-ac7a-f60e980b784d
+
+default
+dir
+
+
+
+add
+

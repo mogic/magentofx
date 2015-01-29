@@ -1,0 +1,101 @@
+<?php
+$minThumbnails = 3;
+$maxThumbnails = 6;
+foreach ($this->getStoreCategories() as $_category):
+	if($_category->getIsActive()):
+		$children      = Mage::getModel('catalog/category')->getCategories($_category->getId());
+		shuffle($children);
+		$childrenCount = $children->count();
+
+		if($childrenCount >= $minThumbnails ): ?>
+			<?php $cur_category = Mage::getModel('catalog/category')->load($_category->getId()); ?>
+			<div class="row">
+				<div class="col-md-12"><h4><a class="theme-text" href="<?php echo $this->getCategoryUrl($_category)?>"><?php echo $_category->getName(); ?></a></h4></div>
+			</div>
+			<?php
+
+				$col = 12/$childrenCount;
+				if($childrenCount == 5 || $childrenCount == 7){
+					$maxThumbnails = 4;
+					$col = 3;
+				}else if($childrenCount >= 8 && $childrenCount < 12){
+					$maxThumbnails = 8;
+					$col = 3;
+				}
+			?>
+			<div class="row">
+				<?php $i = 1; ?>
+				<?php foreach ($children as $child):
+						// Load the actual category object for this category
+						$cur_category = Mage::getModel('catalog/category')->load($child->getId());
+
+						// Load a random product from this category
+						$products = Mage::getResourceModel('catalog/product_collection')->addCategoryFilter($cur_category)->addAttributeToSelect('small_image');
+						$products->getSelect()->order(new Zend_Db_Expr('RAND()'))->limit(1);
+						$products->load();
+
+						$collections = getProductsByCategoryId($child->getId());
+
+						if($i <= $maxThumbnails):
+							foreach ($collections as $product) { //$product = Mage::getModel('catalog/product')->load($product->getId()); ?>
+								<div class="col-xs-6 col-md-<?php echo $col; ?>">
+									<a class="thumbnail" href="<?php echo $child->getRequestPath(); ?>">
+										<img alt="<?php echo $child->getName(); ?>" src="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->resize(135, 135); ?>">
+										<div class="category-caption">
+											<?php echo $child->getName(); ?>
+										</div>
+									</a>
+								</div>
+							<?php } ?>
+						<?php endif; ?>
+				<?php  $i++; ?>
+				<?php endforeach; ?>
+			</div>
+		<?php endif; ?>
+	<?php endif; ?>
+<?php endforeach; ?>
+
+<?php
+function getProductsByCategoryId($categoryId)
+{
+	$catid    = $categoryId;
+	$category = new Mage_Catalog_Model_Category();
+	$category->load($catid); // this is your special offers category id!
+	$collection = $category->getProductCollection()->addAttributeToSelect('small_image');
+	Mage::getModel('catalog/layer')->prepareProductCollection($collection);
+	$collection->getSelect()->order('rand()');
+	$collection->addStoreFilter();
+	$collection->setPage(1, 1)->load();
+
+	return $collection;
+}
+?>
+<?php $_helper = Mage::helper('catalog/category') ?>
+<?php $_categories = $_helper->getStoreCategories() ?>
+<?php $currentCategory = Mage::registry('current_category') ?>
+<?php if (count($_categories) > 0): ?>
+    <ul>
+        <?php foreach($_categories as $_category): ?>
+            <li>
+                <a href="<?php echo $_helper->getCategoryUrl($_category) ?>">
+                    <?php echo $_category->getName() ?>
+                </a>
+                <?php //if ($currentCategory && $currentCategory->getId() == $_category->getId()): ?>
+                    <?php $_category = Mage::getModel('catalog/category')->load($_category->getId()) ?>
+                    <?php $_subcategories = $_category->getChildrenCategories() ?>
+                    <?php if (count($_subcategories) > 0): ?>
+                        <ul>
+                            <?php foreach($_subcategories as $_subcategory): ?>
+                                <li>
+                                    <a href="<?php echo $_helper->getCategoryUrl($_subcategory) ?>">
+                                        <?php echo $_subcategory->getName() ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
+                <?php //endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>

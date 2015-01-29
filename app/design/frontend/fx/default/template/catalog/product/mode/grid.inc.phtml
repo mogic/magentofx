@@ -1,0 +1,118 @@
+<?php $_collectionSize = $_productCollection->count() ?>
+<?php $_columnCount = $this->getColumnCount(); ?>
+
+<div class="row">
+	<?php foreach ($_productCollection as $_product): ?>
+	<div class="col-xs-18 col-sm-6 col-md-3">
+		<div class="thumbnail">
+			<a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
+	<?php $_imgSize = 210; ?>
+				<img id="product-collection-image-<?php echo $_product->getId(); ?>"
+					 src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize); ?>"
+					 alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+			</a>
+			<div class="caption">
+				<h5 class="text-product-title"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></a></h5>
+				<?php
+				$_nameAfterChildren = $this->getChild('name.after')->getSortedChildren();
+				foreach ($_nameAfterChildren as $_nameAfterChildName):
+					$_nameAfterChild = $this->getChild('name.after')->getChild($_nameAfterChildName);
+					$_nameAfterChild->setProduct($_product);
+					?>
+					<?php echo $_nameAfterChild->toHtml(); ?>
+				<?php endforeach; ?>
+
+						<span class="lead text-danger pull-left">
+							<?php echo $this->getPriceHtml($_product, true) ?>
+						</span>
+				<span class="pull-right">
+				<?php if ($_product->getRatingSummary()): ?>
+					<?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
+				<?php endif; ?>
+					</span>
+				<span class="clearfix"></span>
+
+			</div>
+			<div class="row product-actions center-align">
+				<div class="col-md-12">
+					<div class="btn-group">
+						<a data-original-title="Add to Wishlist" data-toggle="tooltip" data-placement="top" title="Add to Wishlist" class="btn btn-xs btn-default fxtooltiptip" href="http://dev.magento.com/wishlist/index/add/product/425/form_key/uYptsTb3B3ISDM04/"><span class="glyphicon glyphicon-heart"></span></a>
+					</div>
+					<div class="btn-group">
+						<button class="btn btn-xs btn-default " type="button"><span class="glyphicon glyphicon-star-empty"></span></button>
+					</div>
+					<div class="btn-group">
+						<a class="btn btn-xs btn-default " href="http://dev.magento.com/sendfriend/product/send/id/425/"><span class="glyphicon glyphicon-envelope"></span></a>
+					</div>
+
+
+					<div class="btn-group">
+						<a class="btn btn-xs btn-default fxtooltip" title="Add to Compare" href="http://dev.magento.com/catalog/product_compare/add/product/425/uenc/aHR0cDovL2Rldi5tYWdlbnRvLmNvbS8,/form_key/uYptsTb3B3ISDM04/"><span class="glyphicon glyphicon-search"></span></a>
+					</div>
+					<div class="btn-group">
+						<button class="btn btn-xs btn-success " onclick="setLocation('http://dev.magento.com/lafayette-convertible-dress.html')" title="Add to Cart" type="button"><span class="glyphicon glyphicon-shopping-cart"></span> Add to Cart</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php endforeach;?>
+</div>
+
+
+
+
+
+<ul class="products-grid products-grid--max-<?php echo $_columnCount; ?>-col">
+	<?php $i = 0;
+	foreach ($_productCollection as $_product): ?>
+		<?php /* if ($i++%$_columnCount==0): ?>
+		  <?php endif */ ?>
+		<li class="item<?php if (($i - 1) % $_columnCount == 0): ?> first<?php elseif ($i % $_columnCount == 0): ?> last<?php endif; ?>">
+			<a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image">
+	<?php $_imgSize = 210; ?>
+				<img id="product-collection-image-<?php echo $_product->getId(); ?>"
+					 src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($_imgSize); ?>"
+					 alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+			</a>
+			<div class="product-info">
+				<h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></a></h2>
+
+				<?php
+				$_nameAfterChildren = $this->getChild('name.after')->getSortedChildren();
+				foreach ($_nameAfterChildren as $_nameAfterChildName):
+					$_nameAfterChild = $this->getChild('name.after')->getChild($_nameAfterChildName);
+					$_nameAfterChild->setProduct($_product);
+					?>
+					<?php echo $_nameAfterChild->toHtml(); ?>
+				<?php endforeach; ?>
+
+				<?php echo $this->getPriceHtml($_product, true) ?>
+				<?php if ($_product->getRatingSummary()): ?>
+					<?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
+				<?php endif; ?>
+				
+				<div class="actions">
+					<?php if ($_product->isSaleable() && !$_product->canConfigure()): ?>
+						<button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+					<?php elseif ($_product->isSaleable()): ?>
+						<a title="<?php echo $this->__('View Details') ?>" class="button" href="<?php echo $_product->getProductUrl() ?>"><?php echo $this->__('View Details') ?></a>
+					<?php else: ?>
+						<p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+						<?php endif; ?>
+					<ul class="add-to-links">
+						<?php if ($this->helper('wishlist')->isAllow()) : ?>
+							<li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
+						<?php endif; ?>
+							<?php if ($_compareUrl = $this->getAddToCompareUrl($_product)): ?>
+							<li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
+	<?php endif; ?>
+					</ul>
+				</div>
+			</div>
+		</li>
+		<?php /* if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+		  <?php endif */ ?>
+<?php endforeach ?>
+</ul>
+<script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd', 'even', 'first', 'last'])</script>

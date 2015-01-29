@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<layout>
+	<default>
+		<reference name="footer" as="footer">
+			<!-- Top Links in footer as duplicate -->
+			<reference name="footerAccountLinks" as="footerAccountLinks">
+				<!-- Mage_Checkout -->
+				<block type="checkout/links" name="checkout_cart_link">
+					<action method="addCartLink"></action>
+					<action method="addCheckoutLink"></action>
+				</block>
+				<!-- Mage_Customer -->
+				<action method="addLink" translate="label title" module="customer"><label>My Account</label><url helper="customer/getAccountUrl"/><title>My Account</title><prepare/><urlParams/><position>10</position></action>
+				<action method="addLink" translate="label title before_text" module="customer"><label>Register</label><url helper="customer/getRegisterUrl" /><title>Register</title><prepare/><urlParams/><position>100</position><li/><a/></action>
+			</reference>
+			<!-- Wish list -->
+			<reference name="footerAccountLinks">
+				<block type="wishlist/links" name="wishlist_link" />
+				<action method="addLinkBlock"><blockName>wishlist_link</blockName></action>
+			</reference>
+		</reference>
+<!--		Your block overrides will go here
+		<remove name="left.permanent.callout" />  the dog
+		<remove name="right.permanent.callout" />  back to school
+		<remove name="catalog.compare.sidebar" />  product compare
+		<remove name="paypal.partner.right.logo" />  paypal logo
+		<remove name="cart_sidebar" /> cart sidebar
+		<remove name="left.reports.product.viewed" /> recently viewed prod
+		<remove name="right.reports.product.viewed" /> recently viewed prod
+		<remove name="right.reports.product.compared" /> recently compared prod
+		<remove name="store_language" />
+
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/script.js</name>
+			</action>
+		</reference>
+
+        <reference name="header">
+           <block type="page/template_links" name="navbar_links" as="navbar_links" template="page/template/navbar-text-links.phtml"/>
+        </reference>
+
+        <reference name="header">
+           <block type="checkout/links" name="navbar_cart_link" as="navbar_cart_link" template="page/template/navbar-cart-link.phtml"/>
+        </reference>-->
+
+	</default>
+    <customer_logged_in>
+        <reference name="footerAccountLinks">
+            <action method="removeLinkByUrl"><url helper="customer/getRegisterUrl" /></action>
+            <action method="addLink" translate="label title" module="customer"><label>Log Out</label><url helper="customer/getLogoutUrl"/><title>Log Out</title><prepare/><urlParams/><position>100</position></action>
+        </reference>
+    </customer_logged_in>
+
+    <customer_logged_out>
+        <reference name="footerAccountLinks">
+            <action method="addLink" translate="label title" module="customer"><label>Log In</label><url helper="customer/getLoginUrl"/><title>Log In</title><prepare/><urlParams/><position>100</position></action>
+        </reference>
+        <remove name="reorder"></remove>
+    </customer_logged_out>
+
+<!--    <customer_logged_out>
+        <reference name="top.links">
+            <action method="removeLinkByUrl"><url helper="customer/getLoginUrl"/></action>
+        </reference>
+        <reference name="navbar_links">
+            <action method="addLink" translate="label title" module="customer"><label>Log In / Register</label><url helper="customer/getLoginUrl"/><title>Log In</title><prepare/><urlParams/><position>100</position></action>
+        </reference>
+        <remove name="reorder"></remove>
+    </customer_logged_out>-->
+</layout>

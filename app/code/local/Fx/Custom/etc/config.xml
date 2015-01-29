@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Fx_Custom>
+            <version>0.1.0</version>
+        </Fx_Custom>
+    </modules>
+    <global>
+        <blocks>
+            <custom>
+                <class>Fx_Custom_Block</class>
+            </custom>
+        </blocks>
+    </global>
+</config>

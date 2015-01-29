@@ -1,0 +1,78 @@
+
+<?php
+echo __FILE__;
+
+function renderThumbnail($categories){
+
+	foreach ($categories as $category){
+		if($category->getIsActive() === true){
+			$currentCategory = Mage::getModel('catalog/category')->load($category->getId());
+
+
+		}
+
+	}
+}
+
+include('thumbnail-renderer.inc.phtml');
+
+//echo '<div class="row">';
+//renderThumbnail($this->getStoreCategories());
+//echo '</div>';
+/*
+foreach ($this->getStoreCategories() as $_category){
+	if($_category->getIsActive()){
+            // Load the actual category object for this category
+            $cur_category = Mage::getModel('catalog/category')->load($_category->getId());
+
+			echo $_category->getName();
+
+			echo '<br>';
+			$children = Mage::getModel('catalog/category')->getCategories($_category->getId());
+			foreach ($children as $category) {
+				echo $category->getName();
+				echo '<br>';
+			}
+
+
+			echo '<hr>';
+	}
+}
+
+    // Iterate all categories in store
+    foreach ($this->getStoreCategories() as $_category):
+
+        // If category is Active
+        if($_category->getIsActive()):
+
+            // Load the actual category object for this category
+            $cur_category = Mage::getModel('catalog/category')->load($_category->getId());
+
+            // Load a random product from this category
+            $products = Mage::getResourceModel('catalog/product_collection')->addCategoryFilter($cur_category)->addAttributeToSelect('small_image');
+            $products->getSelect()->order(new Zend_Db_Expr('RAND()'))->limit(1);
+
+            $products->load();
+
+            // This a bit of a fudge - there's only one element in the collection
+            $_product = null;
+            foreach ( $products as $_product ) {}
+            ?>
+
+            <div style="float: left; padding-right: 30px; text-align: center;">
+                <div class="linkimage"><p><a href="<?php echo $this->getCategoryUrl($_category)?>">
+
+            <?php
+            if(isset($_product)):
+            ?>
+            <img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(135, 135); ?>" width="135" height="135" alt="<?php echo $this->htmlEscape($_product->getName()) ?>" />
+            <?php
+            endif;
+            ?>
+                </div>
+                <?php echo $_category->getName()?></a></p>
+            </div>
+            <?php
+        endif;
+    endforeach;*/
+?>
